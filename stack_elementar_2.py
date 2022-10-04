@@ -1,3 +1,6 @@
+from multiprocessing.dummy import Array
+
+
 class Pilha:
 
     def __init__(self, data=None, next=None):
@@ -199,23 +202,99 @@ class Pilha:
             if count in indexs:
                 array_of_values.append(self.peek_A()) 
             aux_stack.push(self.pop())
+            count += 1  
+
+        self.esvazia_auxiliar(aux_stack)
+
+        return array_of_values
+
+    def get_values_by_indexs_B(self, indexs):
+        count = 0
+        aux = self
+        array_of_values = []
+
+        while aux.data:
+            if count in indexs:
+                array_of_values.append(aux.data)
+            aux = aux.next
+            count += 1
+
+        return array_of_values
+        
+
+    def get_values_by_slice_A(self, start, end):
+        array_of_values = []
+        count = 0
+        aux_stack = Pilha()
+
+        while self.data:
+            if count == start:
+                while count <= end:
+                    array_of_values.append(self.data)
+                    aux_stack.push(self.pop())
+                    count += 1
+            aux_stack.push(self.pop())
             count += 1
 
         self.esvazia_auxiliar(aux_stack)
 
         return array_of_values
+    
+    def get_values_by_slice_B(self, start, end):
+        count = 0
+        aux = self
+        array_of_values = []
+
+        while aux:
+            if count == start:
+                while count <= end:
+                    array_of_values.append(aux.data)
+                    aux = aux.next
+                    count += 1
+
+            aux = aux.next
+            count += 1
+        return array_of_values
         
+    def remove_all_A(self):
+        while self.next:
+            self.pop()
+       
+    def remove_all_B(self):
+        while self.data != None:
+            self.data = self.next.data
+            self.next = self.next.next
+
+    def remove_by_index_A(self, index):
+        aux_stack = Pilha()
+        count = 0
+
+        while index > count:
+            aux_stack.push(self.pop())
+            count += 1
+
+        self.pop()
+
+        self.esvazia_auxiliar(aux_stack)
+    
+    def remove_by_index_B(self, index):
+        count = 0
+
+        while index > count:
+            self = self.next
+        self.data = self.next.data
+        self.next = self.next.next
 
 
 
-        
-        
+def popular_pilha(stack):
+    for i in range(8):
+        stack.push(i)
 
 
 
 stack = Pilha()
-for i in range(8):
-    stack.push(i)
+popular_pilha(stack)
 
 print(stack.display())
 
@@ -241,15 +320,42 @@ print(stack.display())
 print(stack.get_index_by_value_A(5))
 print(stack.get_index_by_value_A(5))
 
-
+#------------------------------------------------------
 stack.push(2)
 print(stack.display())
 
 print(stack.get_all_indexs_by_value_A(2))
 print(stack.get_all_indexs_by_value_B(2))
-
+#------------------------------------------------------
 indexs = [2,4,5,7]
 print(stack.get_values_by_indexs_A(indexs))
+print(stack.get_values_by_indexs_B(indexs))
+
+print(stack.display())
+#------------------------------------------------------
+print(stack.get_values_by_slice_A(2, 5))
+print(stack.get_values_by_slice_B(2, 5))
+
+print(stack.display())
+#------------------------------------------------------
+stack.remove_all_A()
+print(stack.display())
+
+popular_pilha(stack)
+print(stack.display())
+
+stack.remove_all_B()
+print(stack.display())
+#------------------------------------------------------
+popular_pilha(stack)
+print(stack.display())
+stack.remove_by_index_A(3)
+print(stack.display())
+
+stack.remove_by_index_B(3)
+
+
+
 
 
 
