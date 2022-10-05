@@ -279,13 +279,129 @@ class Pilha:
     
     def remove_by_index_B(self, index):
         count = 0
-
+        aux_stack = Pilha()
+        #encontra o elemento de acordo com o index
         while index > count:
-            self = self.next
+            p1 = Pilha(aux_stack.data, aux_stack.next)
+                
+            aux_stack.data = self.data
+            aux_stack.next = p1
+            self.data = self.next.data
+            self.next = self.next.next
+            count += 1
         self.data = self.next.data
         self.next = self.next.next
 
+        #volta os elementos para a stack original
+        while aux_stack.data:
+            p1 = Pilha(self.data, self.next)
 
+            self.data = aux_stack.data
+            self.next = p1
+            aux_stack.data = aux_stack.next.data
+            aux_stack.next = aux_stack.next.next
+
+    def remove_by_value_A(self, value):
+        aux_stack = Pilha()
+        
+        while self.data != value:
+            aux_stack.push(self.pop())
+        self.pop()
+
+        self.esvazia_auxiliar(aux_stack)
+
+    def remove_by_value_B(self, value):
+
+        aux_stack = Pilha()
+
+        while self.data != value:
+            p1 = Pilha(aux_stack.data, aux_stack.next)
+                
+            aux_stack.data = self.data
+            aux_stack.next = p1
+            self.data = self.next.data
+            self.next = self.next.next
+        self.data = self.next.data
+        self.next = self.next.next
+
+        while aux_stack.data:
+            p1 = Pilha(self.data, self.next)
+
+            self.data = aux_stack.data
+            self.next = p1
+            aux_stack.data = aux_stack.next.data
+            aux_stack.next = aux_stack.next.next
+
+    def remove_all_by_value_A(self, value):
+        aux_stack = Pilha()
+
+        while self.data != None:
+            if self.data == value:
+                self.pop()
+            aux_stack.push(self.pop())
+        
+        self.esvazia_auxiliar(aux_stack)
+
+    def remove_all_by_value_B(self, value):
+
+        aux_stack = Pilha()
+
+        while self.data != None:
+            if self.data == value:
+                self.data = self.next.data
+                self.next = self.next.next
+
+            p1 = Pilha(aux_stack.data, aux_stack.next)             
+            aux_stack.data = self.data
+            aux_stack.next = p1
+            self.data = self.next.data
+            self.next = self.next.next     
+
+        while aux_stack.data != None:
+            p1 = Pilha(self.data, self.next)
+
+            self.data = aux_stack.data
+            self.next = p1
+            aux_stack.data = aux_stack.next.data
+            aux_stack.next = aux_stack.next.next
+
+    
+    def remove_all_by_indexes_A(self, indexes):
+        aux_stack = Pilha()
+        count = 0
+        while self.data != None:
+            aux_stack.push(self.pop())
+            if count in indexes:
+                aux_stack.pop()
+            
+            count += 1
+
+        self.esvazia_auxiliar(aux_stack)
+
+    def remove_all_by_indexes_B(self, indexes):
+        aux_stack = Pilha()
+        count = 0
+
+        while self.data != None:
+            p1 = Pilha(aux_stack.data, aux_stack.next)             
+            aux_stack.data = self.data
+            aux_stack.next = p1
+            self.data = self.next.data
+            self.next = self.next.next
+            if count in indexes:
+                aux_stack.data = aux_stack.next.data
+                aux_stack.next = aux_stack.next.next
+            count += 1
+        
+        while aux_stack.data != None:
+            p1 = Pilha(self.data, self.next)
+
+            self.data = aux_stack.data
+            self.next = p1
+            aux_stack.data = aux_stack.next.data
+            aux_stack.next = aux_stack.next.next
+            
+    
 
 def popular_pilha(stack):
     for i in range(8):
@@ -351,8 +467,33 @@ popular_pilha(stack)
 print(stack.display())
 stack.remove_by_index_A(3)
 print(stack.display())
-
 stack.remove_by_index_B(3)
+
+print(stack.display())
+#------------------------------------------------------
+
+stack.remove_by_value_A(6)
+print(stack.display())
+
+stack.remove_by_value_B(1)
+print(stack.display())
+#----------------------------------------------------
+popular_pilha(stack)
+print(stack.display())
+#------------------------------------------------------
+
+stack.remove_all_by_value_A(7)
+stack.remove_all_by_value_B(5)
+print(stack.display())
+
+#---------------------------------------------------
+array_of_indexes = [1, 2, 4]
+stack.remove_all_by_indexes_A(array_of_indexes)
+print(stack.display())
+
+array_of_indexes = [1, 2, 4]
+stack.remove_all_by_indexes_B(array_of_indexes)
+print(stack.display())
 
 
 
