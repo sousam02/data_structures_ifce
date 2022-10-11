@@ -1,4 +1,3 @@
-from multiprocessing.dummy import Array
 
 
 class Pilha:
@@ -401,7 +400,50 @@ class Pilha:
             aux_stack.data = aux_stack.next.data
             aux_stack.next = aux_stack.next.next
             
-    
+    def remove_all_by_slice_A(self, inicio, final):
+        aux_stack = Pilha()
+        count = 0
+        while self.data != None:
+            if count == inicio:
+                while final >= count:
+                    self.pop()
+                    count += 1
+            aux_stack.push(self.pop())
+            count += 1
+
+        self.esvazia_auxiliar(aux_stack)
+
+    def remove_all_by_slice_B(self, inicio, final):
+        aux_stack = Pilha()
+        count = 0
+
+        while self.data != None:
+            if count == inicio:
+                while final >= count:
+                    self.data = self.next.data
+                    self.next = self.next.next
+                    count += 1
+            p1 = Pilha(aux_stack.data, aux_stack.next)
+                
+            aux_stack.data = self.data
+            aux_stack.next = p1
+            self.data = self.next.data
+            self.next = self.next.next
+            count += 1
+        
+        while aux_stack.data != None:
+            p1 = Pilha(self.data, self.next)
+
+            self.data = aux_stack.data
+            self.next = p1
+            aux_stack.data = aux_stack.next.data
+            aux_stack.next = aux_stack.next.next
+
+        
+
+            
+            
+
 
 def popular_pilha(stack):
     for i in range(8):
@@ -413,47 +455,59 @@ stack = Pilha()
 popular_pilha(stack)
 
 print(stack.display())
-
+print('PEEK')
 print(stack.peek_A())
 print(stack.peek_B())
 
+#---------------------------------------------------------
+print('\nis_empty')
 print(stack.is_empty_A())
 print(stack.is_empty_B())
 
+#---------------------------------------------------------
+print('\nLen')
 print(stack.len_A())
 print(stack.len_B())
 
+#---------------------------------------------------------
+print('\nLast')
 print(stack.last_A())
 print(stack.last_B())
 
 print(stack.display())
 
+#---------------------------------------------------------
+print('\nget_value_by_index')
 print(stack.get_value_by_index_A(3))
 print(stack.get_value_by_index_B(3))
 
 print(stack.display())
-
+#---------------------------------------------------------
+print('\nget_index_by_value')
 print(stack.get_index_by_value_A(5))
 print(stack.get_index_by_value_A(5))
 
 #------------------------------------------------------
+print('\nget_all_indexs_by_value')
 stack.push(2)
 print(stack.display())
-
 print(stack.get_all_indexs_by_value_A(2))
 print(stack.get_all_indexs_by_value_B(2))
 #------------------------------------------------------
+print('\nget_values_by_indexs')
 indexs = [2,4,5,7]
 print(stack.get_values_by_indexs_A(indexs))
 print(stack.get_values_by_indexs_B(indexs))
 
 print(stack.display())
 #------------------------------------------------------
+print('\nget_values_by_slice')
 print(stack.get_values_by_slice_A(2, 5))
 print(stack.get_values_by_slice_B(2, 5))
 
 print(stack.display())
 #------------------------------------------------------
+print('\nremove_all')
 stack.remove_all_A()
 print(stack.display())
 
@@ -463,6 +517,7 @@ print(stack.display())
 stack.remove_all_B()
 print(stack.display())
 #------------------------------------------------------
+print('\nremove_by_index')
 popular_pilha(stack)
 print(stack.display())
 stack.remove_by_index_A(3)
@@ -471,7 +526,7 @@ stack.remove_by_index_B(3)
 
 print(stack.display())
 #------------------------------------------------------
-
+print('\nremove_by_value')
 stack.remove_by_value_A(6)
 print(stack.display())
 
@@ -481,12 +536,13 @@ print(stack.display())
 popular_pilha(stack)
 print(stack.display())
 #------------------------------------------------------
-
+print('\nremove_all_by_value')
 stack.remove_all_by_value_A(7)
 stack.remove_all_by_value_B(5)
 print(stack.display())
 
 #---------------------------------------------------
+print('\nremove_all_by_indexes')
 array_of_indexes = [1, 2, 4]
 stack.remove_all_by_indexes_A(array_of_indexes)
 print(stack.display())
@@ -494,7 +550,20 @@ print(stack.display())
 array_of_indexes = [1, 2, 4]
 stack.remove_all_by_indexes_B(array_of_indexes)
 print(stack.display())
-
+#--------------------------------------------------
+popular_pilha(stack)
+print(stack.display())
+#------------------------------------------------------
+print('\nremove_all_by_slice')
+stack.remove_all_by_slice_A(3,6)
+print(stack.display())
+#--------------------------------------------------
+popular_pilha(stack)
+print(stack.display())
+#------------------------------------------------------
+stack.remove_all_by_slice_B(3,6)
+print(stack.display())
+#--------------------------------------------------
 
 
 
