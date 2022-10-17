@@ -1,5 +1,18 @@
 
+class Stack_array:
+    stack = []
 
+    def __init__(self):
+        self.stack = []
+
+    def push(self, data):
+        self.stack.append(data)
+
+    def pop(self):
+        if len(self.stack) == 0:
+            return
+        return self.stack.pop()
+        
 class Pilha:
 
     def __init__(self, data=None, next=None):

@@ -30,12 +30,27 @@ class Queue:
         self.next = self.next.next
 
         return removed_data
+    
+    def rebuild_queue(self, array):
+        self.remove_all_d()
+
+        if self.data == None:
+            self.data = array[0]
+        for i in range(1, len(array)):
+            f = Queue(array[i], None)
+
+            aux_queue = self
+
+            while aux_queue.next != None:
+                aux_queue = aux_queue.next
+            
+            aux_queue.next = f
 
     def self_to_aux(self, aux_queue):
         while self.data != None:
             aux_queue.insert(self.remove())
 
-
+    #put the values back to self queue
     def aux_to_self(self, aux_queue):
         while aux_queue.data != None:
             self.insert(aux_queue.remove())
@@ -314,9 +329,112 @@ class Queue:
         
         self.aux_to_self(aux_queue)
 
-    
+    def remove_all_by_value_d(self, value):
+        array = self.array_conversion()
+        aux_array = []
+
+        for i in range(len(array)):
+            if value != array[i]:
+                aux_array.append(array[i])
+
+        self.remove_all_d()
+        
+        if self.data == None:
+            self.data = aux_array[0]
+        for i in range(1, len(aux_array)):
+            f = Queue(aux_array[i], None)
+
+            aux_queue = self
+
+            while aux_queue.next != None:
+                aux_queue = aux_queue.next
+            
+            aux_queue.next = f
+
+    def remove_all_by_indexes_c(self, indexes):
+        aux_queue = Queue()
+        count = 0
+        
+        while self.data != None:
+            if count in indexes:  
+                self.remove()
+            else:
+                aux_queue.insert(self.remove())            
+            count += 1
+
+        self.aux_to_self(aux_queue)
+        
+    def remove_all_by_indexes_d(self, indexes):
+        array = self.array_conversion()
+
+        for index in indexes:
+            array.pop(index)
+
+        self.rebuild_queue(array)
+
+    def remove_all_by_slice_c(self, start, end):
+        aux_queue = Queue()
+        count = 0
+
+        while self.data != None:
+            if count == start:
+                while count <= end:
+                    self.remove()
+                    count += 1
+            aux_queue.insert(self.remove())
+            count += 1
+        
+        self.aux_to_self(aux_queue)
+
+
+    def remove_all_by_slice_d(self, start, end):
+        array = self.array_conversion()
+        new_array = array[:start] + array[end:]
+
+        self.rebuild_queue(new_array)
+
+    def set_value_in_index_c(self, index, value):
+        aux_queue = Queue()
+        count = 0
+
+        while self.data != None:
+            if count == index:
+                self.data = value
+            count += 1
+            aux_queue.insert(self.remove())
+        
+        self.aux_to_self(aux_queue)
+
+    def set_value_in_index_d(self, index, value):
+        array = self.array_conversion()
+
+        array[index] = value
+
+        self.rebuild_queue(array)
+
+    def set_values_in_indexes(self, indexes, values):
+        aux_queue = Queue()
+        count = 0
 
         
+        while self.data != None:
+            if count in indexes:
+                self.data = values[indexes.index(count)]
+            count += 1
+            aux_queue.insert(self.remove())
+
+        self.aux_to_self(aux_queue)
+
+    def set_values_in_indexes_d(self, indexes, values):
+
+        array = self.array_conversion()
+        count = 0
+        for index in indexes:
+            array[index] = values[indexes.index(index)]
+            count += 1
+
+        self.rebuild_queue(array)
+
 def popular_fila(fila):
     for i in range(8):
         fila.insert(i)
@@ -396,4 +514,43 @@ popular_fila(queue)
 print(queue.array_conversion())
 
 queue.remove_all_by_value_c(5)
+print(queue.array_conversion())
+
+queue.remove_all_by_value_d(0)
+print(queue.array_conversion())
+
+indexes = [0, 3, 5, 6]
+queue.remove_all_by_indexes_c(indexes)
+print(queue.array_conversion())
+
+popular_fila(queue)
+print(queue.array_conversion())
+
+queue.remove_all_by_indexes_d(indexes)
+print(queue.array_conversion())
+
+queue.remove_all_by_slice_c(2,5)
+print(queue.array_conversion())
+
+popular_fila(queue)
+print(queue.array_conversion())
+
+queue.remove_all_by_slice_d(2,5)
+print(queue.array_conversion())
+
+queue.set_value_in_index_c(1, 1)
+print(queue.array_conversion())
+
+queue.set_value_in_index_d(3, 1)
+print(queue.array_conversion())
+
+indexes = [4, 5, 6]
+values = [1, 1, 1]
+
+queue.set_values_in_indexes(indexes, values)
+print(queue.array_conversion())
+
+indexes = [7, 8]
+values = [1,1]
+queue.set_values_in_indexes_d(indexes, values)
 print(queue.array_conversion())
