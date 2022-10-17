@@ -70,6 +70,7 @@ class Node:
             if node.right:
                 res.insert(0, node.right)
 
+
         return level_array
     
     def altura(self):
@@ -117,7 +118,7 @@ class Node:
                 counter += 1
         return counter
     
-    def is_complete(self, root):
+    def strictly_binary(self, root):
         stack = Stack_array()
         stack.push(root)
 
@@ -128,10 +129,33 @@ class Node:
                 stack.push(node.left)
             if node.right:
                 stack.push(node.right)
-            if node.left and node.right is None:
-                return 'is not complete'
-        return 'is complete'
+            if (node.left is None and node.right is not None) or (node.left is not None and node.right is None):
+                return 'is not strictly binary'
+        return 'is strictly binary'
 
+    def count_nodes(self, root):
+        if root is None:
+            return 0
+        return (1 + self.count_nodes(root.left) + self.count_nodes(root.right))
+
+
+# Check if the tree is complete binary tree
+    def is_complete(self, root, index, numberNodes):
+
+        # Check if the tree is empty
+        if root is None:
+            return True
+
+        if index >= numberNodes:
+            return False
+
+        return (self.is_complete(root.left, 2 * index + 1, numberNodes)
+                and self.is_complete(root.right, 2 * index + 2, numberNodes))
+
+
+
+
+               
 
 
 
@@ -146,8 +170,8 @@ root.insert(14)
 root.insert(35)
 root.insert(10)
 root.insert(19)
-root.insert(31)
-root.insert(43)
+#root.insert(31)
+#root.insert(43)
 
 #print(root.inorderTraversal(root))
 print(root.in_order(root))
@@ -157,4 +181,12 @@ print(root.level_order(root))
 print(root.altura())
 print(root.size(root))
 print(root.leafs(root))
-print(root.is_complete(root))
+print(root.strictly_binary(root))
+
+node_count = root.size(root)
+index = 0
+
+if root.is_complete(root, index, node_count):
+    print("The tree is a complete binary tree")
+else:
+    print("The tree is not a complete binary tree")
